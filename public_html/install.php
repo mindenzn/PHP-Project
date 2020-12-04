@@ -1,13 +1,15 @@
 <?php
+
+use App\App;
+use Core\FileDB;
+
 require '../bootloader.php';
+App::$db = new FileDB(DB_FILE);
+App::$db->createTable('users');
+App::$db->insertRow('users', [
+    'email' => 'test@test.com',
+    'password' => '123',
+]);
+App::$db->createTable('items');
 
-$fileDB = new FileDB(DB_FILE);
-
-$fileDB->createTable('users');
-$fileDB->insertRow('users', ['email' => 'test@test.com', 'password' => '123']);
-
-$fileDB->createTable('items');
-
-$fileDB->save();
-
-var_dump('ISVALYTA');
+print 'DB cleared';

@@ -1,5 +1,11 @@
 <?php
 require '../bootloader.php';
 
-logout('login');
+use App\App;
+use Core\Cookie;
+
+$cookie = new Cookie('User_id');
+$cookie->unset();
+
+App::$session->logout('index.php');
 

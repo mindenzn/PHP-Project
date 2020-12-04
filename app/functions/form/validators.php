@@ -3,6 +3,7 @@
 // //////////////////////////////
 // [1] FORM VALIDATORS
 // //////////////////////////////
+use App\App;
 
 /**
  * Check if login is successful
@@ -13,10 +14,8 @@
  */
 function validate_login($form_values, array &$form): bool
 {
-    $fileDB = new FileDB(DB_FILE);
-    $fileDB->load();
 
-    if ($fileDB->getRowWhere('users', [
+    if ($fileDB=App::$db->getRowWhere('users', [
         'email' => $form_values['email'],
         'password' => $form_values['password']])) {
         return true;
@@ -42,9 +41,7 @@ function validate_login($form_values, array &$form): bool
 function validate_user_unique(string $field_value, array &$field): bool
 {
 
-    $fileDB = new FileDB(DB_FILE);
-    $fileDB->load();
-    $db_data = $fileDB->getData();
+    $db_data = $fileDB=App::$db->getData();
 
     foreach ($db_data['users'] as $entry) {
         if ($field_value === $entry['email']) {

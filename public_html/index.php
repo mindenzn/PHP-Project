@@ -1,37 +1,30 @@
 <?php
+
+use App\App;
+use App\Views\BasePage;
+use App\Views\Navigation;
+use Core\Cookie;
+use Core\View;
+
 require '../bootloader.php';
 
 $h1 = 'Welcome to my SHOP';
 
-$nav = generate_nav();
+$content = new View([
+    'title' => 'My workshop',
+    'products' => App::$db->getRowsWhere('items'),
+]);
 
-$db = new FileDB(DB_FILE);
-$db->load();
-$items = $db->getRowsWhere('items')
 
+$cookie = new Cookie('User_id');
+$cookie->getCookie();
+
+$nav = new Navigation();
+
+$page = new BasePage([
+    'title' => 'Index',
+    'content' => $content->render(ROOT . '/app/templates/content/index.tpl.php'),
+]);
+
+print $page->render();
 ?>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Index</title>
-    <link rel="stylesheet" href="media/styles.css">
-</head>
-<body>
-<header>
-    <?php require ROOT . '/core/templates/navigation.tpl.php'; ?>
-</header>
-<main>
-    <h1 class="title"><?php print $h1 ?></h1>
-    <section class="grid-container">
-        <?php foreach ($items as $product) : ?>
-            <div class="grid-item">
-                <h2 class="item-name"><?php print $product['item_name']; ?></h2>
-                <img class="item-img" src="<?php print $product['item_photo']; ?>" alt="">
-                <h2><?php print $product['item_price']?> eur</h2>
-            </div>
-        <?php endforeach; ?>
-    </section>
-</main>
-</body>
-</html>
-
